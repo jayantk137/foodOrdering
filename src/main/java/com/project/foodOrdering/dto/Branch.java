@@ -18,6 +18,9 @@ public class Branch {
 	private String BranchEmail;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User user;
+	public Branch() {
+		
+	}
 	public User getUser() {
 		return user;
 	}
