@@ -2,15 +2,22 @@ package com.project.foodOrdering.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class User {
@@ -20,12 +27,56 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
+	private String username;
 	private String role;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-	private List<Branch> listOfBranches = new ArrayList<>();
-    public User(){
-    	
-    }
+	
+	@OneToOne
+	@JsonIgnore
+	Menu menu;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Branch> listOfBranches;
+    
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	List<foodOrder> FoodOrderList;
+	
+
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
+	}
+
+	public List<foodOrder> getFoodOrderList() {
+		return FoodOrderList;
+	}
+
+	public void setFoodOrderList(List<foodOrder> foodOrderList) {
+		FoodOrderList = foodOrderList;
+	}
+	
+	public List<foodOrder> addFoodOrder(foodOrder foodorder){
+		this.FoodOrderList.add(foodorder);
+		return this.FoodOrderList;
+	}
+
+	public User() {
+
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -40,6 +91,11 @@ public class User {
 
 	public void setListOfBranches(List<Branch> listOfBranches) {
 		this.listOfBranches = listOfBranches;
+	}
+	
+	public List<Branch> addBranches(Branch branch){
+		this.listOfBranches.add(branch);
+		return this.listOfBranches;
 	}
 
 	public String getName() {
@@ -72,6 +128,19 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public List<Branch> deletebranch(long branch_id) {
+		// TODO Auto-generated method stub
+		int count=0;
+		for(Branch branch:this.listOfBranches) {
+			if(branch.getId()==branch_id) {
+				this.listOfBranches.remove(count);
+				return this.listOfBranches;
+			}
+			++count;
+		}
+		return null;
 	}
 
 }

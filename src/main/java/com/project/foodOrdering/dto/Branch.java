@@ -1,11 +1,14 @@
 package com.project.foodOrdering.dto;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Branch {
@@ -16,8 +19,13 @@ public class Branch {
 	private String BranchAddress;
 	private long BranchPhone;
 	private String BranchEmail;
-	@ManyToOne(fetch = FetchType.EAGER)
+	
+	
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@JsonIgnore
 	private User user;
+	
+	
 	public Branch() {
 		
 	}
